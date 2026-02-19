@@ -1,8 +1,144 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+<section class="hero text-center">
+    <h1 class="fw-bold">Home Services, On Demand</h1>
+    <p class="lead">Trusted professionals at your doorstep</p>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+    <div class="mt-4">
+        <button class="btn btn-primary btn-lg px-5">
+            Book a Service
+        </button>
+    </div>
+</section>
+
+<section class="container mt-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="fw-semibold">Popular Services</h4>
+        <a href="#" class="text-decoration-none fw-semibold text-primary">View all</a>
+    </div>
+
+    <div class="row g-4">
+
+        <div class="col-6 col-md-3">
+            <div class="card service-card p-4 text-center" onclick="showProblems('plumbing')">
+                <div class="icon mb-2">🔧</div>
+                <h6 class="fw-semibold">Plumber</h6>
+                <small class="text-muted">From ₹299</small>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-3">
+            <div class="card service-card p-4 text-center" onclick="showProblems('electrician')">
+                <div class="icon mb-2">💡</div>
+                <h6 class="fw-semibold">Electrician</h6>
+                <small class="text-muted">From ₹249</small>
+            </div>
+        </div>
+
+
+        <div class="col-6 col-md-3">
+            <div class="card service-card p-4 text-center" onclick="showProblems('ac')">
+                <div class="icon mb-2">❄</div>
+                <h6 class="fw-semibold">AC Repair</h6>
+                <small class="text-muted">From ₹499</small>
+            </div>
+        </div>
+
+
+        <div class="col-6 col-md-3">
+            <div class="card service-card p-4 text-center">
+                <div class="icon mb-2">🧹</div>
+                <h6 class="fw-semibold">Cleaning</h6>
+                <small class="text-muted">From ₹199</small>
+            </div>
+        </div>
+
+    </div>
+    <section class="container mt-4 d-none" id="problemSection">
+
+        <h4 class="fw-semibold mb-3">Select your problem</h4>
+
+        <div class="row g-3" id="problemList"></div>
+
+    </section>
+</section>
+
+
+<section class="container my-5">
+    <div class="offer p-4 d-flex flex-column flex-md-row justify-content-between align-items-center">
+        <div>
+            <h5 class="fw-bold mb-1">🎉 First Booking Special</h5>
+            <p class="mb-0">Get 20% OFF instantly</p>
+        </div>
+        <button class="btn btn-dark mt-3 mt-md-0">Use Code</button>
+    </div>
+
+</section>
+
+<section class="container text-center my-5">
+
+    <div class="row g-4">
+
+        <div class="col-4">
+            <h5>⚡</h5>
+            <p class="fw-semibold mb-0">Fast Booking</p>
+            <small class="text-muted">Instant confirmation</small>
+        </div>
+
+        <div class="col-4">
+            <h5>🛡</h5>
+            <p class="fw-semibold mb-0">Verified Pros</p>
+            <small class="text-muted">Trusted experts</small>
+        </div>
+
+        <div class="col-4">
+            <h5>💰</h5>
+            <p class="fw-semibold mb-0">Best Prices</p>
+            <small class="text-muted">No hidden cost</small>
+        </div>
+
+    </div>
+</section>
+
+     <script>
+        const staticProblems = {
+          plumbing: [
+            {icon:"🚰", name:"Tap Leakage"},
+            {icon:"🧱", name:"Pipe Repair"},
+            {icon:"🚿", name:"Bathroom Fitting"},
+            {icon:"🚽", name:"Toilet Blockage"}
+          ],
+          electrician: [
+            {icon:"💡", name:"Light Issue"},
+            {icon:"🔌", name:"Socket Repair"},
+            {icon:"⚡", name:"Short Circuit"}
+          ],
+          ac: [
+            {icon:"❄", name:"AC Not Cooling"},
+            {icon:"🛠", name:"Gas Refill"},
+            {icon:"🔧", name:"General Service"}
+          ]
+        };
+
+        function showProblems(service){
+          const list = document.getElementById("problemList");
+          const section = document.getElementById("problemSection");
+
+          list.innerHTML = "";
+
+          staticProblems[service].forEach(p=>{
+            list.innerHTML += `
+            <div class="col-6 col-md-3">
+              <div class="card service-card p-3 text-center">
+                <div class="icon">${p.icon}</div>
+                <h6>${p.name}</h6>
+              </div>
+            </div>`;
+          });
+
+          section.classList.remove("d-none");
+          section.scrollIntoView({behavior:"smooth"});
+        }
+     </script>
