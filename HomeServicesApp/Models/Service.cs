@@ -1,10 +1,20 @@
-﻿namespace HomeServicesApp.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace HomeServicesApp.Models
 {
     public class Service
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Icon { get; set; }
-        public decimal BasePrice { get; set; }
+        [Key]
+        public int ServiceId { get; set; }
+
+        [Required]
+        public string ServiceName { get; set; } = string.Empty;
+
+        [Required]
+        public decimal Price { get; set; }
+
+        public string Icon { get; set; } = string.Empty;
+
+        public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
     }
 }
