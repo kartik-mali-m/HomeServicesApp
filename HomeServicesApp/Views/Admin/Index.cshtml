@@ -1,0 +1,31 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model List<Service>
+
+<h3>Services</h3>
+<a class="btn btn-primary mb-3" href="/Admin/AddService">Add New</a>
+
+<table class="table table-bordered">
+    <tr>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Icon</th>
+        <th>Action</th>
+    </tr>
+
+    @foreach (var s in Model)
+    {
+        <tr>
+            <td>@s.Name</td>
+            <td>₹@s.BasePrice</td>
+            <td>@s.Icon</td>
+            <td>
+                <a class="btn btn-sm btn-warning" href="/Admin/Edit/@s.Id">Edit</a>
+                <a class="btn btn-sm btn-danger" href="/Admin/Delete/@s.Id">Delete</a>
+            </td>
+        </tr>
+    }
+</table>
