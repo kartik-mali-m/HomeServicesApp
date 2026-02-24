@@ -38,10 +38,17 @@
                     </form>
 
                     <!-- AUTH -->
-                    <div class="d-flex gap-2">
-                        <a class="btn btn-outline-primary btn-sm" href="/Account/Login">Login</a>
-                        <a class="btn btn-primary btn-sm" href="/Account/Register">Sign Up</a>
-                    </div>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <form asp-area="Identity" asp-page="/Account/Logout" method="post">
+                            <button type="submit">Logout</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <a asp-area="Identity" asp-page="/Account/Login">Login</a>
+                        <a asp-area="Identity" asp-page="/Account/Register">Register</a>
+                    }
 
                 </div>
             </div>
