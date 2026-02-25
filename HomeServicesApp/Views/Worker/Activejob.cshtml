@@ -1,0 +1,187 @@
+﻿@{
+    ViewData["Title"] = "Completed Jobs";
+    Layout = null; /* Remove if using shared layout */
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Completed Jobs</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+
+    <style>
+        body {
+            background: #f4f6f9;
+        }
+
+        .page-title {
+            font-weight: 600;
+        }
+
+        .job-card {
+            border-radius: 14px;
+            transition: 0.3s;
+        }
+
+            .job-card:hover {
+                transform: translateY(-5px);
+            }
+
+        .badge-status {
+            font-size: 12px;
+            padding: 6px 10px;
+            border-radius: 20px;
+        }
+
+        .earnings-box {
+            background: #111827;
+            color: white;
+            border-radius: 14px;
+            padding: 20px;
+        }
+
+        .rating i {
+            color: #facc15;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container py-4">
+
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="page-title">Completed Jobs</h4>
+
+            <button class="btn btn-outline-dark btn-sm">
+                <i class="bi bi-download"></i> Export Report
+            </button>
+        </div>
+
+        <!-- Earnings Summary -->
+        <div class="earnings-box mb-4 shadow-sm">
+            <div class="row text-center">
+                <div class="col-md-4">
+                    <h6>Total Completed</h6>
+                    <h3>24</h3>
+                </div>
+                <div class="col-md-4">
+                    <h6>Total Earnings</h6>
+                    <h3>₹ 32,500</h3>
+                </div>
+                <div class="col-md-4">
+                    <h6>Average Rating</h6>
+                    <h3>4.8 ⭐</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Completed Job Cards -->
+        <div class="row g-4">
+
+            <!-- Job 1 -->
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card job-card shadow-sm p-3">
+
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="badge bg-success badge-status">Completed</span>
+                        <small class="text-muted">20 Feb 2026</small>
+                    </div>
+
+                    <h6 class="fw-semibold">Plumbing Service</h6>
+                    <p class="text-muted mb-2">Bathroom Pipe Repair</p>
+
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <strong>₹ 1,200</strong>
+                        <span class="badge bg-primary badge-status">Paid</span>
+                    </div>
+
+                    <div class="rating mb-2">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-half"></i>
+                    </div>
+
+                    <button class="btn btn-sm btn-outline-secondary w-100">
+                        View Details
+                    </button>
+
+                </div>
+            </div>
+
+            <!-- Job 2 -->
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card job-card shadow-sm p-3">
+
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="badge bg-success badge-status">Completed</span>
+                        <small class="text-muted">18 Feb 2026</small>
+                    </div>
+
+                    <h6 class="fw-semibold">AC Repair</h6>
+                    <p class="text-muted mb-2">Gas Refill & Cleaning</p>
+
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <strong>₹ 2,000</strong>
+                        <span class="badge bg-primary badge-status">Paid</span>
+                    </div>
+
+                    <div class="rating mb-2">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                    </div>
+
+                    <button class="btn btn-sm btn-outline-secondary w-100">
+                        View Details
+                    </button>
+
+                </div>
+            </div>
+
+            <!-- Job 3 -->
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card job-card shadow-sm p-3">
+
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="badge bg-success badge-status">Completed</span>
+                        <small class="text-muted">15 Feb 2026</small>
+                    </div>
+
+                    <h6 class="fw-semibold">Electrician Service</h6>
+                    <p class="text-muted mb-2">Switch Board Installation</p>
+
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <strong>₹ 900</strong>
+                        <span class="badge bg-warning text-dark badge-status">Pending Payment</span>
+                    </div>
+
+                    <div class="rating mb-2">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star"></i>
+                        <i class="bi bi-star"></i>
+                    </div>
+
+                    <button class="btn btn-sm btn-outline-secondary w-100">
+                        View Details
+                    </button>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
