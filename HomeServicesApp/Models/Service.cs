@@ -14,6 +14,8 @@ namespace HomeServicesApp.Models
 
         public string? IconPath { get; set; }
 
+
+
         public ICollection<Booking>? Bookings { get; set; }
     }
 }

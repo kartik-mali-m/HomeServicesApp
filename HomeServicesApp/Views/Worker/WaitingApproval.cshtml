@@ -1,0 +1,25 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@{
+    ViewData["Title"] = "Waiting for Approval";
+}
+
+<div class="container mt-5 text-center">
+    <h2 class="text-warning">⏳ Waiting for Admin Approval</h2>
+
+    <p class="mt-3">
+        Your worker account has been created successfully.
+        <br />
+        Please wait while an administrator reviews and approves your profile.
+    </p>
+
+    <p class="text-muted">
+        You will be able to access your dashboard once approved.
+    </p>
+
+    <a asp-controller="Account" asp-action="Logout" class="btn btn-outline-danger mt-3">
+        Logout
+    </a>
+</div>

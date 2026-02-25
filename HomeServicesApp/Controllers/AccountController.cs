@@ -1,4 +1,5 @@
-﻿using HomeServicesApp.Models;
+﻿using HomeServicesApp.Data;
+using HomeServicesApp.Models;
 using HomeServicesApp.Models.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,17 +10,20 @@ namespace HomeServicesApp.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly AppDbContext _context;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager,
+            AppDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _context = context;
         }
 
         // ==========================
-        // REGISTER
+        // CUSTOMER REGISTER
         // ==========================
         public IActionResult Register()
         {
@@ -29,34 +33,31 @@ namespace HomeServicesApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var user = new ApplicationUser
             {
-                var user = new ApplicationUser
-                {
-                    UserName = model.Email,
-                    Email = model.Email,
-                    FullName = model.FullName
-                };
+                UserName = model.Email,
+                Email = model.Email,
+                FullName = model.FullName
+            };
 
-                var result = await _userManager.CreateAsync(user, model.Password);
+            var result = await _userManager.CreateAsync(user, model.Password);
 
-                if (result.Succeeded)
-                {
-                    // Assign default role
-                    await _userManager.AddToRoleAsync(user, "Customer");
-
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-
-                    return RedirectToAction("Index", "Home");
-                }
-
+            if (!result.Succeeded)
+            {
                 foreach (var error in result.Errors)
-                {
                     ModelState.AddModelError("", error.Description);
-                }
+
+                return View(model);
             }
 
-            return View(model);
+            await _userManager.AddToRoleAsync(user, "Customer");
+
+            await _signInManager.SignInAsync(user, false);
+
+            return RedirectToAction("Index", "Home");
         }
 
         // ==========================
@@ -66,7 +67,6 @@ namespace HomeServicesApp.Controllers
         {
             return View();
         }
-
 
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
@@ -88,21 +88,21 @@ namespace HomeServicesApp.Controllers
                 false,
                 false);
 
-            if (result.Succeeded)
+            if (!result.Succeeded)
             {
-                var roles = await _userManager.GetRolesAsync(user);
-
-                if (roles.Contains("Worker"))
-                    return RedirectToAction("Dashboard", "Worker");
-
-                if (roles.Contains("Admin"))
-                    return RedirectToAction("Dashboard", "Admin");
-
-                return RedirectToAction("Index", "Home");
+                ModelState.AddModelError("", "Invalid login");
+                return View(model);
             }
 
-            ModelState.AddModelError("", "Invalid login");
-            return View(model);
+            var roles = await _userManager.GetRolesAsync(user);
+
+            if (roles.Contains("Worker"))
+                return RedirectToAction("Dashboard", "Worker");
+
+            if (roles.Contains("Admin"))
+                return RedirectToAction("Dashboard", "Admin");
+
+            return RedirectToAction("Index", "Home");
         }
 
         // ==========================
@@ -114,11 +114,9 @@ namespace HomeServicesApp.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-
-
-        // ======================
+        // ==========================
         // WORKER REGISTER
-        // ======================
+        // ==========================
         public IActionResult RegisterWorker()
         {
             return View();
@@ -139,27 +137,39 @@ namespace HomeServicesApp.Controllers
 
             var result = await _userManager.CreateAsync(user, model.Password);
 
-            if (result.Succeeded)
+            if (!result.Succeeded)
             {
-                var roleResult = await _userManager.AddToRoleAsync(user, "Worker");
+                foreach (var error in result.Errors)
+                    ModelState.AddModelError("", error.Description);
 
-                if (!roleResult.Succeeded)
-                {
-                    ModelState.AddModelError("", "Role assignment failed");
-                    return View(model);
-                }
-
-                await _signInManager.SignInAsync(user, false);
-
-                return RedirectToAction("Dashboard", "Worker");
+                return View(model);
             }
 
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError("", error.Description);
-            }
+            // Assign Worker role
+            await _userManager.AddToRoleAsync(user, "Worker");
 
-            return View(model);
+            // Create Worker profile
+            var worker = new Worker
+            {
+                UserId = user.Id,
+                Name = model.FullName,
+                Email = model.Email,
+                Phone = model.Phone,
+                SkillType = model.SkillType,
+                ExperienceYears = model.ExperienceYears,
+                ChargesPerHour = model.ChargesPerHour,
+                Address = model.Address,
+                IsApproved = false,
+                IsAvailable = true,
+                CreatedAt = DateTime.Now
+            };
+
+            _context.Workers.Add(worker);
+            await _context.SaveChangesAsync();
+
+            await _signInManager.SignInAsync(user, false);
+
+            return RedirectToAction("Dashboard", "Worker");
         }
     }
 }

@@ -81,7 +81,27 @@
             <input asp-for="Password" type="password" class="form-control" placeholder="Password" />
             <span asp-validation-for="Password" class="text-danger"></span>
 
-            <button type="submit" class="btn-register">
+            <input asp-for="Phone" class="form-control" placeholder="Phone Number" />
+            <span asp-validation-for="Phone" class="text-danger"></span>
+
+            <input asp-for="SkillType" class="form-control" placeholder="Skill (Plumber, Electrician, etc)" />
+            <span asp-validation-for="SkillType" class="text-danger"></span>
+
+            <div class="row">
+                <div class="col-6">
+                    <input asp-for="ExperienceYears" class="form-control" placeholder="Experience (Years)" />
+                    <span asp-validation-for="ExperienceYears" class="text-danger"></span>
+                </div>
+                <div class="col-6">
+                    <input asp-for="ChargesPerHour" class="form-control" placeholder="₹ Charges / Hour" />
+                    <span asp-validation-for="ChargesPerHour" class="text-danger"></span>
+                </div>
+            </div>
+
+            <textarea asp-for="Address" class="form-control" placeholder="Full Address" rows="2"></textarea>
+            <span asp-validation-for="Address" class="text-danger"></span>
+
+            <button type="submit" class="btn-register mt-2">
                 Register as Worker
             </button>
 
