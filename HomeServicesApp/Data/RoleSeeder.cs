@@ -5,14 +5,13 @@ namespace HomeServicesApp.Data
 {
     public static class RoleSeeder
     {
-        public static async Task SeedRolesAsync(IServiceProvider serviceProvider)
+        public static async Task SeedRolesAsync(IServiceProvider services)
         {
-            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+            var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
 
-            string[] roles = { "Admin", "Customer", "Worker" };
+            string[] roles = { "Admin", "Worker", "User" };
 
-            // 1️⃣ Create Roles
             foreach (var role in roles)
             {
                 if (!await roleManager.RoleExistsAsync(role))
@@ -21,7 +20,6 @@ namespace HomeServicesApp.Data
                 }
             }
 
-            // 2️⃣ Create Default Admin User
             string adminEmail = "admin@gmail.com";
             string adminPassword = "Admin@123";
 

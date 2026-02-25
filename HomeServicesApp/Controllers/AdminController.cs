@@ -117,7 +117,7 @@ using Microsoft.EntityFrameworkCore;
 namespace HomeServicesApp.Controllers
 {
     public class AdminController : Controller
-    {
+    { 
         private readonly AppDbContext _context;
         private readonly IWebHostEnvironment _environment;
 
@@ -127,10 +127,23 @@ namespace HomeServicesApp.Controllers
             _environment = environment;
         }
 
+<<<<<<< HEAD
+        // Show all servicesv
+        public IActionResult Index()
+        {
+            var services = _context.Services.ToList();
+            return View(services);
+        }
+
+        // Add service form
+        // ➕ ADD SERVICE (GET)
+        public IActionResult AddService() 
+=======
         // ===============================
         // DASHBOARD
         // ===============================
         public IActionResult Dashboard()
+>>>>>>> 21d814be76e80bb463d09acdb39b67f7bdca3a29
         {
             return View();
         }
@@ -197,8 +210,13 @@ namespace HomeServicesApp.Controllers
                 }
 
                 _context.Services.Add(service);
+<<<<<<< HEAD
+                _context.SaveChanges(); 
+                return RedirectToAction("Index");
+=======
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Services");
+>>>>>>> 21d814be76e80bb463d09acdb39b67f7bdca3a29
             }
 
             return View(service);

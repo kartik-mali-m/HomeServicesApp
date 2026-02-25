@@ -1,18 +1,18 @@
 ﻿using HomeServicesApp.Data;
-using HomeServicesApp.Models;   // 🔥 Make sure this matches your namespace
+using HomeServicesApp.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // =============================
-// Add Database
+// Database
 // =============================
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection")));
 
 // =============================
-// Add Identity + Roles
+// Identity + Roles
 // =============================
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
@@ -26,18 +26,19 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 .AddDefaultTokenProviders();
 
 // =============================
-// Configure Login Path (Important)
+// Correct Identity Routes
 // =============================
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.LoginPath = "/Account/Login";
-    options.AccessDeniedPath = "/Account/AccessDenied";
+    options.LoginPath = "/Identity/Account/Login";
+    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
 });
 
 // =============================
-// Add MVC
+// MVC + Razor Pages
 // =============================
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
 
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
@@ -60,16 +61,21 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-// 🔥 IMPORTANT
 app.UseAuthentication();
 app.UseAuthorization();
 
 // =============================
-// Default Route
+// Routes
 // =============================
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapRazorPages();
+
+// =============================
+// Role Seeder
+// =============================
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;

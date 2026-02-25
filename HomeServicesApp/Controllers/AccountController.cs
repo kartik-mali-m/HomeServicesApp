@@ -67,33 +67,41 @@ namespace HomeServicesApp.Controllers
             return View();
         }
 
+
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+
+            if (user == null)
             {
-                var result = await _signInManager.PasswordSignInAsync(
-                    model.Email,
-                    model.Password,
-                    model.RememberMe,
-                    false);
-
-                if (result.Succeeded)
-                {
-                    var user = await _userManager.FindByEmailAsync(model.Email);
-
-                    if (await _userManager.IsInRoleAsync(user, "Admin"))
-                        return RedirectToAction("Dashboard", "Admin");
-
-                    if (await _userManager.IsInRoleAsync(user, "Worker"))
-                        return RedirectToAction("Dashboard", "Worker");
-
-                    return RedirectToAction("Index", "Home");
-                }
-
-                ModelState.AddModelError("", "Invalid login attempt");
+                ModelState.AddModelError("", "Invalid login");
+                return View(model);
             }
 
+            var result = await _signInManager.PasswordSignInAsync(
+                user,
+                model.Password,
+                false,
+                false);
+
+            if (result.Succeeded)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+
+                if (roles.Contains("Worker"))
+                    return RedirectToAction("Dashboard", "Worker");
+
+                if (roles.Contains("Admin"))
+                    return RedirectToAction("Dashboard", "Admin");
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            ModelState.AddModelError("", "Invalid login");
             return View(model);
         }
 
@@ -119,30 +127,36 @@ namespace HomeServicesApp.Controllers
         [HttpPost]
         public async Task<IActionResult> RegisterWorker(RegisterViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var user = new ApplicationUser
             {
-                var user = new ApplicationUser
+                UserName = model.Email,
+                Email = model.Email,
+                FullName = model.FullName
+            };
+
+            var result = await _userManager.CreateAsync(user, model.Password);
+
+            if (result.Succeeded)
+            {
+                var roleResult = await _userManager.AddToRoleAsync(user, "Worker");
+
+                if (!roleResult.Succeeded)
                 {
-                    UserName = model.Email,
-                    Email = model.Email,
-                    FullName = model.FullName
-                };
-
-                var result = await _userManager.CreateAsync(user, model.Password);
-
-                if (result.Succeeded)
-                {
-                    await _userManager.AddToRoleAsync(user, "Worker");
-
-                    await _signInManager.SignInAsync(user, false);
-
-                    return RedirectToAction("Dashboard", "Worker");
+                    ModelState.AddModelError("", "Role assignment failed");
+                    return View(model);
                 }
 
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError("", error.Description);
-                }
+                await _signInManager.SignInAsync(user, false);
+
+                return RedirectToAction("Dashboard", "Worker");
+            }
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError("", error.Description);
             }
 
             return View(model);
