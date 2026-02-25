@@ -161,8 +161,7 @@ namespace HomeServicesApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ServiceId"));
 
-                    b.Property<string>("Icon")
-                        .IsRequired()
+                    b.Property<string>("IconPath")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")

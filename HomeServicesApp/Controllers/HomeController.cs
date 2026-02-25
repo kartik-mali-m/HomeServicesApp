@@ -14,6 +14,7 @@ namespace HomeServicesApp.Controllers
         }
 
 
+
         public IActionResult Index()
         {
             var services = _context.Services.ToList();

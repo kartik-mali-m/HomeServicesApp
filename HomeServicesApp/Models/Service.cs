@@ -4,7 +4,6 @@ namespace HomeServicesApp.Models
 {
     public class Service
     {
-        [Key]
         public int ServiceId { get; set; }
 
         [Required]
@@ -13,8 +12,8 @@ namespace HomeServicesApp.Models
         [Required]
         public decimal Price { get; set; }
 
-        public string Icon { get; set; } = string.Empty;
+        public string? IconPath { get; set; }
 
-        public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
+        public ICollection<Booking>? Bookings { get; set; }
     }
 }
