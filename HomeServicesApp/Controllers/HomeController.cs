@@ -1,6 +1,7 @@
 using HomeServicesApp.Data;
 using HomeServicesApp.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace HomeServicesApp.Controllers
@@ -15,9 +16,15 @@ namespace HomeServicesApp.Controllers
 
 
 
-        public IActionResult Index()
+        //public IActionResult Index()
+        //{
+        //    //var services = _context.Services.ToList();
+        //    return View();
+        //}
+        public async Task<IActionResult> Index()
         {
-            var services = _context.Services.ToList();
+            var services = await _context.Services.ToListAsync();
+
             return View(services);
         }
 

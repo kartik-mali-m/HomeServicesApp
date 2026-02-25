@@ -1,123 +1,14 @@
-﻿//using HomeServicesApp.Data;
-//using HomeServicesApp.Models;
-//using Microsoft.AspNetCore.Mvc;
-
-//namespace HomeServicesApp.Controllers
-//{
-//    public class AdminController : Controller
-//    {
-//        private readonly AppDbContext _context;
-
-//        public AdminController(AppDbContext context)
-//        {
-//            _context = context;
-//        }
-
-//        public IActionResult Dashboard()
-//        {
-//            return View();
-
-//        }
-
-//        public IActionResult Users()
-//        {
-
-//            return View();
-//        }
-
-//        public IActionResult Workers()
-//        {
-//            return View();
-//        }
-
-//        public IActionResult Bookings()
-//        {
-//            return View();
-//        }
-
-//        public IActionResult Revenue()
-//        {
-
-//            return View();
-//        }
-
-
-
-//        //// Show all services
-
-//        //public IActionResult Index()
-//        //{
-//        //    var services = _context.Services.ToList();
-//        //    return View(services);
-//        //}
-
-//        //// Add service form
-//        //// ➕ ADD SERVICE (GET)
-//        //public IActionResult AddService()
-//        //{
-//        //    return View();
-//        //}
-
-//        //// ➕ ADD SERVICE (POST)
-//        //[HttpPost]
-//        //public IActionResult AddService(Service service)
-//        //{
-//        //    if (ModelState.IsValid)
-//        //    {
-//        //        _context.Services.Add(service);
-//        //        _context.SaveChanges();
-//        //        return RedirectToAction("Index");
-//        //    }
-
-//        //    return View(service);
-//        //}
-
-//        //// ✏ EDIT SERVICE (GET)
-//        //[HttpGet]
-//        //public IActionResult Edit(int id)
-//        //{
-//        //    var service = _context.Services.Find(id);
-
-//        //    if (service == null)
-//        //        return NotFound();
-
-//        //    return View(service);
-//        //}
-//        //// ✏ EDIT SERVICE (POST)
-//        //[HttpPost]
-//        //public IActionResult Edit(Service service)
-//        //{
-//        //    _context.Services.Update(service);
-//        //    _context.SaveChanges();
-//        //    return RedirectToAction("Index");
-//        //}
-
-//        //// 🗑 DELETE SERVICE
-//        //public IActionResult Delete(int id)
-//        //{
-//        //    var service = _context.Services.Find(id);
-
-//        //    if (service == null)
-//        //        return NotFound();
-
-//        //    _context.Services.Remove(service);
-//        //    _context.SaveChanges();
-
-//        //    return RedirectToAction("Index");
-//        //}
-//    }
-//}
-
-
-using HomeServicesApp.Data;
+﻿using HomeServicesApp.Data;
 using HomeServicesApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace HomeServicesApp.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
-    { 
+    {
         private readonly AppDbContext _context;
         private readonly IWebHostEnvironment _environment;
 
@@ -127,42 +18,77 @@ namespace HomeServicesApp.Controllers
             _environment = environment;
         }
 
-<<<<<<< HEAD
-        // Show all servicesv
-        public IActionResult Index()
-        {
-            var services = _context.Services.ToList();
-            return View(services);
-        }
-
-        // Add service form
-        // ➕ ADD SERVICE (GET)
-        public IActionResult AddService() 
-=======
         // ===============================
         // DASHBOARD
         // ===============================
-        public IActionResult Dashboard()
->>>>>>> 21d814be76e80bb463d09acdb39b67f7bdca3a29
+        public async Task<IActionResult> Dashboard()
         {
+            ViewBag.TotalWorkers = await _context.Workers.CountAsync();
+            ViewBag.TotalServices = await _context.Services.CountAsync();
+            ViewBag.TotalBookings = await _context.Bookings.CountAsync();
+
             return View();
         }
 
+        // ===============================
+        // USERS (placeholder)
+        // ===============================
         public IActionResult Users()
         {
             return View();
         }
 
-        public IActionResult Workers()
+        // ===============================
+        // WORKER MANAGEMENT
+        // ===============================
+        public async Task<IActionResult> Workers()
         {
-            return View();
+            var workers = await _context.Workers
+                .OrderBy(w => w.IsApproved)
+                .ThenBy(w => w.Name)
+                .ToListAsync();
+
+            return View(workers);
         }
 
-        public IActionResult Bookings()
+        public async Task<IActionResult> ApproveWorker(int id)
         {
-            return View();
+            var worker = await _context.Workers.FindAsync(id);
+
+            if (worker != null)
+            {
+                worker.IsApproved = true;
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Workers");
         }
 
+        public async Task<IActionResult> RejectWorker(int id)
+        {
+            var worker = await _context.Workers.FindAsync(id);
+
+            if (worker != null)
+            {
+                worker.IsApproved = false;
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Workers");
+        }
+
+        // ===============================
+        // BOOKINGS (placeholder)
+        // ===============================
+        public async Task<IActionResult> Bookings()
+        {
+            var bookings = await _context.Bookings.ToListAsync();
+            return View(bookings);
+        }
+
+        // ===============================
+        // REVENUE (placeholder)
+        // ===============================
         public IActionResult Revenue()
         {
             return View();
@@ -172,57 +98,49 @@ namespace HomeServicesApp.Controllers
         // ================= SERVICE MANAGEMENT =================
         // =====================================================
 
-        // 🔹 Show all services
+        // Show all services
         public async Task<IActionResult> Services()
         {
             var services = await _context.Services.ToListAsync();
             return View(services);
         }
 
-        // 🔹 Add Service (GET)
+        // Create Service (GET)
         public IActionResult CreateService()
         {
             return View();
         }
 
-        // 🔹 Add Service (POST)
+        // Create Service (POST)
         [HttpPost]
         public async Task<IActionResult> CreateService(Service service, IFormFile? IconFile)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+                return View(service);
+
+            if (IconFile != null)
             {
-                if (IconFile != null)
-                {
-                    string uploadFolder = Path.Combine(_environment.WebRootPath, "uploads");
+                string uploadFolder = Path.Combine(_environment.WebRootPath, "uploads");
 
-                    if (!Directory.Exists(uploadFolder))
-                        Directory.CreateDirectory(uploadFolder);
+                if (!Directory.Exists(uploadFolder))
+                    Directory.CreateDirectory(uploadFolder);
 
-                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(IconFile.FileName);
-                    string filePath = Path.Combine(uploadFolder, fileName);
+                string fileName = Guid.NewGuid() + Path.GetExtension(IconFile.FileName);
+                string filePath = Path.Combine(uploadFolder, fileName);
 
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await IconFile.CopyToAsync(stream);
-                    }
+                using var stream = new FileStream(filePath, FileMode.Create);
+                await IconFile.CopyToAsync(stream);
 
-                    service.IconPath = "/uploads/" + fileName;
-                }
-
-                _context.Services.Add(service);
-<<<<<<< HEAD
-                _context.SaveChanges(); 
-                return RedirectToAction("Index");
-=======
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Services");
->>>>>>> 21d814be76e80bb463d09acdb39b67f7bdca3a29
+                service.IconPath = "/uploads/" + fileName;
             }
 
-            return View(service);
+            await _context.Services.AddAsync(service);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Services");
         }
 
-        // 🔹 Edit Service (GET)
+        // Edit Service (GET)
         public async Task<IActionResult> EditService(int id)
         {
             var service = await _context.Services.FindAsync(id);
@@ -233,21 +151,20 @@ namespace HomeServicesApp.Controllers
             return View(service);
         }
 
-        // 🔹 Edit Service (POST)
+        // Edit Service (POST)
         [HttpPost]
         public async Task<IActionResult> EditService(Service service)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Services.Update(service);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Services");
-            }
+            if (!ModelState.IsValid)
+                return View(service);
 
-            return View(service);
+            _context.Services.Update(service);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Services");
         }
 
-        // 🔹 Delete Service
+        // Delete Service
         public async Task<IActionResult> DeleteService(int id)
         {
             var service = await _context.Services.FindAsync(id);
