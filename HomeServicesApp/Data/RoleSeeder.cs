@@ -4,11 +4,11 @@ namespace HomeServicesApp.Data
 {
     public static class RoleSeeder
     {
-        public static async Task SeedRolesAsync(IServiceProvider serviceProvider)
+        public static async Task SeedRolesAsync(IServiceProvider services)
         {
-            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
-            string[] roles = { "Admin", "Customer", "Worker" };
+            string[] roles = { "Admin", "Worker", "User" };
 
             foreach (var role in roles)
             {

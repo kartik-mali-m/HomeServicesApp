@@ -1,18 +1,100 @@
-﻿@*
+﻿@model HomeServicesApp.Models.ViewModels.RegisterViewModel
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
 }
-@model HomeServicesApp.Models.ViewModels.RegisterViewModel
 
-<h2>Worker Register</h2>
 
-<form asp-action="RegisterWorker" method="post">
+<style>
+    .register-container {
+        min-height: 80vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(135deg, #2563eb, #1e3a8a);
+    }
 
-    <input asp-for="FullName" placeholder="Full Name" />
-    <input  placeholder="Full Name" />
-    <input asp-for="Email" placeholder="Email" />
-    <input asp-for="Password" placeholder="Password" />
+    .register-card {
+        background: white;
+        padding: 40px;
+        border-radius: 12px;
+        width: 100%;
+        max-width: 420px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
 
-    <button type="submit">Register as Worker</button>
-</form>
+    .register-card h2 {
+        text-align: center;
+        margin-bottom: 25px;
+        font-weight: 600;
+    }
+
+    .form-control {
+        border-radius: 8px;
+        padding: 12px;
+        margin-bottom: 15px;
+    }
+
+    .btn-register {
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        font-weight: 600;
+        background: linear-gradient(135deg, #2563eb, #1e40af);
+        color: white;
+        border: none;
+        transition: 0.3s;
+    }
+
+    .btn-register:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
+    }
+
+    .login-link {
+        text-align: center;
+        margin-top: 15px;
+        font-size: 14px;
+    }
+
+    .login-link a {
+        color: #2563eb;
+        font-weight: 500;
+        text-decoration: none;
+    }
+</style>
+
+<div class="register-container">
+    <div class="register-card">
+
+        <h2>Worker Registration</h2>
+
+        <form asp-action="RegisterWorker" method="post">
+
+            <input asp-for="FullName" class="form-control" placeholder="Full Name" />
+            <span asp-validation-for="FullName" class="text-danger"></span>
+
+            <input asp-for="Email" class="form-control" placeholder="Email Address" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+
+            <input asp-for="Password" type="password" class="form-control" placeholder="Password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+
+            <button type="submit" class="btn-register">
+                Register as Worker
+            </button>
+
+        </form>
+
+        <div class="login-link">
+            Already have an account?
+            <a asp-controller="Account" asp-action="Login">Login</a>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
