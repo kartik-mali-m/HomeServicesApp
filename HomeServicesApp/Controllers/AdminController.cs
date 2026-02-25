@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace HomeServicesApp.Controllers
 {
     public class AdminController : Controller
-    {
+    { 
         private readonly AppDbContext _context;
 
         public AdminController(AppDbContext context)
@@ -13,7 +13,7 @@ namespace HomeServicesApp.Controllers
             _context = context;
         }
 
-        // Show all services
+        // Show all servicesv
         public IActionResult Index()
         {
             var services = _context.Services.ToList();
@@ -22,7 +22,7 @@ namespace HomeServicesApp.Controllers
 
         // Add service form
         // ➕ ADD SERVICE (GET)
-        public IActionResult AddService()
+        public IActionResult AddService() 
         {
             return View();
         }
@@ -34,7 +34,7 @@ namespace HomeServicesApp.Controllers
             if (ModelState.IsValid)
             {
                 _context.Services.Add(service);
-                _context.SaveChanges();
+                _context.SaveChanges(); 
                 return RedirectToAction("Index");
             }
 
