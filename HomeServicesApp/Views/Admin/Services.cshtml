@@ -1,0 +1,47 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model List<HomeServicesApp.Models.Service>
+@{
+    Layout = "~/Views/Admin/_AdminLayout.cshtml";
+}
+
+<h3 class="mb-4">Service Management</h3>
+
+<a href="/Admin/CreateService" class="btn btn-primary mb-3">
+    Add New Service
+</a>
+
+<div class="card p-3 table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Icon</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var service in Model)
+            {
+                <tr>
+                    <td>
+                        @if (!string.IsNullOrEmpty(service.IconPath))
+                        {
+                            <img src="@service.IconPath" width="40" />
+                        }
+                    </td>
+                    <td>@service.ServiceName</td>
+                    <td>₹ @service.Price</td>
+                    <td>
+                        <a href="/Admin/EditService/@service.ServiceId" class="btn btn-sm btn-warning">Edit</a>
+                        <a href="/Admin/DeleteService/@service.ServiceId" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

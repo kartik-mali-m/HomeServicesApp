@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HomeServicesApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260224204956_kartikaland")]
-    partial class kartikaland
+    [Migration("20260225164625_kartikamali")]
+    partial class kartikamali
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -164,8 +164,7 @@ namespace HomeServicesApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ServiceId"));
 
-                    b.Property<string>("Icon")
-                        .IsRequired()
+                    b.Property<string>("IconPath")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")

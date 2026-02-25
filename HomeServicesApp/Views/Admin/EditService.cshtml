@@ -1,0 +1,29 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model HomeServicesApp.Models.Service
+@{
+    Layout = "~/Views/Admin/_AdminLayout.cshtml";
+}
+
+<h3>Edit Service</h3>
+
+<form asp-action="EditService" method="post">
+
+    <input type="hidden" asp-for="ServiceId" />
+
+    <div class="mb-3">
+        <label>Name</label>
+        <input asp-for="ServiceName" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Price</label>
+        <input asp-for="Price" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Update</button>
+
+</form>
